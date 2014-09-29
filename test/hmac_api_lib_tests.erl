@@ -257,33 +257,27 @@ roundtrip_test() ->
 gen_method() ->
   oneof([post, get, delete, put]).
 
-gen_content_type() ->
-  oneof(["application/json","text/html","text/plain","text/csv","text/css"]).
-
 gen_unicode_string() ->
   ?SUCHTHAT(S, string(), lists:all(fun (C) -> xmerl_ucs:is_unicode(C) end, S)).
 
 prop_roundtrip() ->
     %% non unicode strings will break xmerl_ucs:to_utf8:
-    % counterexample: {[],post,[97,112,112,108,105,99,97,116,105,111,110,47,106,115,111,110],[55296]}
+    % counterexample: {[],post,[55296]}
     ?FORALL(
-            {P,M,C, D}, {gen_unicode_string(), gen_method(), gen_content_type(), gen_unicode_string()},
+            {P,M, D}, {gen_unicode_string(), gen_method(), gen_unicode_string()},
             begin
               {PublicKey, PrivateKey} = hmac_api_lib:get_api_keypair(),
               Method = M,
               Path = P,
-              ContentType = C,
               Date = D,
-              Headers = [{"date", Date}],
-              {_Name, Authorization} = hmac_api_lib:sign(PrivateKey, PublicKey, Method, Path, Headers,
-                                                          ContentType),
+              Headers = [{"Date", Date}],
+              {_Name, Authorization} = hmac_api_lib:sign(PrivateKey, PublicKey, Method, Path, Headers),
               hmac_api_lib:validate(PrivateKey, PublicKey, Authorization,
                                                  #hmac_signature{
                                                     date = Date,
                                                     method = Method,
                                                     headers = Headers,
-                                                    resource = Path,
-                                                    contenttype = ContentType
+                                                    resource = Path
                                                    })
                 == match
             end
