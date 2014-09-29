@@ -77,4 +77,3 @@ date_header(#hmac_config{header_prefix = Prefix}, Req) ->
         undefined -> wrq:get_req_header("Date", Req);
         Date -> Date
     end.
-

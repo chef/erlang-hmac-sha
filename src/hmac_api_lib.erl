@@ -92,20 +92,25 @@ parse_authorization_header(Header) ->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 make_HTTPAuth_header(Schema, Signature, PublicKey) ->
-    {"Authorization", Schema ++ " "
-     ++ PublicKey ++ ":" ++ Signature}.
+    {"Authorization", Schema ++ " " ++ PublicKey ++ ":" ++ Signature}.
 
 make_signature_string(#hmac_signature{config = Config,
                                       contentmd5 = ContentMD5, contenttype = ContentType,
                                       date = Date, headers = Headers,
                                       method = Method, resource = Resource}) ->
     Date1 = get_date(Config, Headers, Date),
+
     string:to_upper(atom_to_list(Method)) ++ "\n"
-        ++ ContentMD5 ++ "\n"
-        ++ ContentType ++ "\n"
+        ++ not_undefined(ContentMD5) ++ "\n"
+        ++ not_undefined(ContentType) ++ "\n"
         ++ Date1 ++ "\n"
         ++ canonicalise_headers(Config, Headers)
         ++ canonicalise_resource(Resource).
+
+not_undefined(undefined) ->
+    "";
+not_undefined(Value) ->
+    Value.
 
 sign_data(PrivateKey, #hmac_signature{} = Signature) ->
     Str = make_signature_string(Signature),
