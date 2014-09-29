@@ -11,8 +11,8 @@
 
 -record(hmac_signature, {config = #hmac_config{} :: #hmac_config{},
                          method :: atom(),
-                         contentmd5 = "" :: string(),
-                         contenttype = "" :: string(),
+                         contentmd5 = undefined :: string(),
+                         contenttype = undefined :: string(),
                          date :: string(),
                          headers = [],
                          resource = "" :: string()
