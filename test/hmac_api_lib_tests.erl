@@ -1,6 +1,7 @@
 -module(hmac_api_lib_tests).
 
 -include("src/hmac_api.hrl").
+-include_lib("proper/include/proper.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
 -author("Hypernumbers Ltd <gordon@hypernumbers.com>").
@@ -252,6 +253,46 @@ roundtrip_test() ->
                                                       }),
                  match),
     ok.
+
+gen_method() ->
+  oneof([post, get, delete, put]).
+
+gen_content_type() ->
+  oneof(["application/json","text/html","text/plain","text/csv","text/css"]).
+
+gen_unicode_string() ->
+  ?SUCHTHAT(S, string(), lists:all(fun (C) -> xmerl_ucs:is_unicode(C) end, S)).
+
+prop_roundtrip() ->
+    %% non unicode strings will break xmerl_ucs:to_utf8:
+    % counterexample: {[],post,[97,112,112,108,105,99,97,116,105,111,110,47,106,115,111,110],[55296]}
+    ?FORALL(
+            {P,M,C, D}, {gen_unicode_string(), gen_method(), gen_content_type(), gen_unicode_string()},
+            begin
+              {PublicKey, PrivateKey} = hmac_api_lib:get_api_keypair(),
+              Method = M,
+              Path = P,
+              ContentType = C,
+              Date = D,
+              Headers = [{"date", Date}],
+              {_Name, Authorization} = hmac_api_lib:sign(PrivateKey, PublicKey, Method, Path, Headers,
+                                                          ContentType),
+              hmac_api_lib:validate(PrivateKey, PublicKey, Authorization,
+                                                 #hmac_signature{
+                                                    date = Date,
+                                                    method = Method,
+                                                    headers = Headers,
+                                                    resource = Path,
+                                                    contenttype = ContentType
+                                                   })
+                == match
+            end
+          ).
+
+roundtrip_qc_test_() ->
+  {timeout, 60000,
+    ?_assert(proper:quickcheck(prop_roundtrip(),
+                          [{to_file, user},{numtests,1000}]))}.
 
 paths_test() ->
     {PublicKey, PrivateKey} = hmac_api_lib:get_api_keypair(),
