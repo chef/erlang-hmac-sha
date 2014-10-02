@@ -7,6 +7,5 @@
                   kernel,
                   stdlib
                  ]},
-  {mod, { erlang_hmac_sha_app, []}},
   {env, []}
  ]}.
