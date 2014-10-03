@@ -36,7 +36,7 @@ wm_authenticate(Req, State, PrivateKeyFun, Config) ->
 
             case PrivateKeyFun(PublicKey) of
                 undefined ->
-                    {"HMAC", Req, State};
+                    {false, Req, State};
                 PrivateKey ->
                     Signature = #hmac_signature{config = Config,
                                                 method = Method,
@@ -49,7 +49,7 @@ wm_authenticate(Req, State, PrivateKeyFun, Config) ->
                         match ->
                             {true, Req, State};
                         no_match ->
-                            {"HMAC", Req, State}
+                            {false, Req, State}
                     end
             end
     end.

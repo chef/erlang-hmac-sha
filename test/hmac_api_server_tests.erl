@@ -60,7 +60,7 @@ wm_test_() ->
                  %% This is not the key we're looking for
                  PrivateKeyFun = fun(_Public) -> "theyarenotthedroidsyouarelookingfor" end,
                  Got = hmac_api_server:wm_authenticate(req, state, PrivateKeyFun, hmac_aws:config()),
-                 ?assertEqual({"HMAC", req, state}, Got)
+                 ?assertEqual({false, req, state}, Got)
          end
         },
         {"unknown private key",
@@ -68,7 +68,7 @@ wm_test_() ->
                  %% know not a key
                  PrivateKeyFun = fun(_Public) -> undefined end,
                  Got = hmac_api_server:wm_authenticate(req, state, PrivateKeyFun, hmac_aws:config()),
-                 ?assertEqual({"HMAC", req, state}, Got)
+                 ?assertEqual({false, req, state}, Got)
          end
         }
      ]
