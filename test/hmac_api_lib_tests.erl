@@ -194,9 +194,7 @@ signature_test8(_) ->
                                 headers = Headers,
                                 resource = URL},
     Sig = hmac_api_lib:make_signature_string(Signature),
-    Expected = "GET\n\n\n\n"
-        ++"x-amz-date:Tue, 27 Mar 2007 21:20:26 +0000\n"
-        ++"/tongs/ya/bas/?andy&bosh=burp&zbish=bash",
+    Expected = "GET\n\n\nTue, 27 Mar 2007 21:20:26 +0000\nx-amz-date:Tue, 27 Mar 2007 21:20:26 +0000\n/tongs/ya/bas/?andy&bosh=burp&zbish=bash",
     ?assertEqual(Expected, Sig).
 
 signature_test9(_) ->
@@ -214,9 +212,7 @@ signature_test9(_) ->
                                 headers = Headers,
                                 resource = URL},
     Sig = hmac_api_lib:make_signature_string(Signature),
-    Expected = "GET\n\n\n\n"
-        ++"x-amz-date:Tue, 27 Mar 2007 21:20:26 +0000\n"
-        ++"/tongs/ya/bas/?andy&bosh=burp&zbish=bash",
+    Expected = "GET\n\n\nTue, 27 Mar 2007 21:20:26 +0000\nx-amz-date:Tue, 27 Mar 2007 21:20:26 +0000\n/tongs/ya/bas/?andy&bosh=burp&zbish=bash",
     ?assertEqual(Expected, Sig).
 
 amazon_test1(_) ->
@@ -234,7 +230,7 @@ amazon_test1(_) ->
                                 headers = Headers,
                                 resource = URL},
     Sig = hmac_api_lib:sign_data(?PRIVATEKEY, Signature),
-    Expected = "k3nL7gH3+PadhTEVn5Ip83xlYzk=",
+    Expected = "amG66fXy2/BJ/HvrN2jUKINWfrE=",
     ?assertEqual(Expected, Sig).
 
 roundtrip_test() ->

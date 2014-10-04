@@ -27,7 +27,7 @@ wm_test_() ->
     Date = "Tue, 27 Mar 2007 21:20:26 +0000",
     Headers = mochiweb_headers:from_list([{"x-amz-date", Date}]),
 
-    Authorization = "AWS " ++ ?PUBLIC_KEY ++ ":k3nL7gH3+PadhTEVn5Ip83xlYzk=",
+    Authorization = "AWS " ++ ?PUBLIC_KEY ++ ":amG66fXy2/BJ/HvrN2jUKINWfrE=",
     {foreach,
      fun() -> setup(MockedModules),
       meck:expect(wrq, method, fun(req) -> Method end),
@@ -83,7 +83,7 @@ wm_missing_headers_test_() ->
     Date = "Tue, 27 Mar 2007 21:20:26 +0000",
     Headers = mochiweb_headers:from_list([{"x-amz-date", Date}]),
 
-    Authorization = "AWS " ++ ?PUBLIC_KEY ++ ":k3nL7gH3+PadhTEVn5Ip83xlYzk=",
+    Authorization = "AWS " ++ ?PUBLIC_KEY ++ ":amG66fXy2/BJ/HvrN2jUKINWfrE=",
     {foreach,
      fun() -> setup(MockedModules),
       meck:expect(wrq, method, fun(req) -> Method end),

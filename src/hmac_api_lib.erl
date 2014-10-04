@@ -153,10 +153,10 @@ canonicalise_query(List) ->
 %% if there's a header date take it and ditch the date
 get_date(_Config, [], Date) ->
     Date;
-get_date(#hmac_config{date_header = DateHeader} = Config, [{K, _V} | T], Date) ->
+get_date(#hmac_config{date_header = DateHeader} = Config, [{K, V} | T], Date) ->
     case string:to_lower(K) of
         DateHeader ->
-            [];
+            V;
         _ ->
             get_date(Config, T, Date)
     end.
