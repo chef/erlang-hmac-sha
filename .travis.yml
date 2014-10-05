@@ -1,0 +1,18 @@
+language: erlang
+install: true
+script: make get-rebar all ct
+notifications:
+  email: false
+otp_release:
+  - R16B03
+branches:
+  only:
+      - master
+notifications:
+  hipchat:
+    rooms:
+      # analytics
+      - secure: gvwFF7+ZEhnaviVLaSg1IFcYuL2p+xs/WqMVS4FMZz1KDz6epULQeo4I4fn8lLgy6XUrL47xRSbTeN0FcddzIRubrVFXWBgh2cN9Ehg2DbC4QGnpQuETj+70OtfMCy7eTnsNC6wlLt/BEnSXOTZBuf+ttNVA2KlKaT71IuwTHBA=
+
+      # Build Statuses
+      - secure: C6oel+Z1LZoRUZaboC9qPf4t7n6VKXtDKBW16Q77vIuM2qa6jhOMtTvyUW4mdEbcKaLtp+5iZvlSDVZ694HgqYvOzrkVphZR77UTdbccDQ6hUHaJGEqFq78xVvBFBOjly4CnV4TJqLUqQiYHqdOZyGCHQ3vASFtONvxkiybBio4=
