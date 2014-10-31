@@ -27,7 +27,7 @@ wm_authenticate(Req, State, PrivateKeyFun, Config) ->
             Reason;
         {Authorization, Date} ->
             Method = wrq:method(Req),
-            Path = wrq:path(Req),
+            Path = wrq:raw_path(Req),
             Headers = hma_util:normalise(mochiweb_headers:to_list(wrq:req_headers(Req))),
             ContentMD5 = wrq:get_req_header("Content-MD5", Req),
             ContentType = wrq:get_req_header("Content-Type", Req),

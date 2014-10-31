@@ -31,7 +31,7 @@ wm_test_() ->
     {foreach,
      fun() -> setup(MockedModules),
       meck:expect(wrq, method, fun(req) -> Method end),
-      meck:expect(wrq, path, fun(req) -> URL end),
+      meck:expect(wrq, raw_path, fun(req) -> URL end),
       meck:expect(wrq, req_headers, fun(req) -> Headers end),
       meck:expect(wrq, get_req_header, fun(Name, req) ->
                                                case Name of
@@ -87,7 +87,7 @@ wm_missing_headers_test_() ->
     {foreach,
      fun() -> setup(MockedModules),
       meck:expect(wrq, method, fun(req) -> Method end),
-      meck:expect(wrq, path, fun(req) -> URL end),
+      meck:expect(wrq, raw_path, fun(req) -> URL end),
       meck:expect(wrq, req_headers, fun(req) -> Headers end)
      end,
      fun(_) -> cleanup(MockedModules) end,
